@@ -187,43 +187,131 @@ class PPE(Base):
     status = Column(Integer, nullable=False)
 
 
+# class Task(Base):
+#     __tablename__ = "tasks"
+#     id = Column(Integer, primary_key=True, index=True)
+#     cty_code = Column(String, nullable=False)
+#     dept_code = Column(String, nullable=False)
+#     section_code = Column(String, nullable=False)
+#     observation_type_id = Column(Integer, ForeignKey("observation_types.id"))
+#     person_working = Column(String, nullable=False)
+#     observation_done_by = Column(String, nullable=False)
+#     task_desc = Column(String, nullable=False)
+#     personnel = Column(String, nullable=False)
+#     task_date = Column(DateTime, server_default=func.now())
+#     status = Column(
+#         String, nullable=False, default="open"
+#     )  # should default to open until changed by designated personnel
+#     body_position_id = Column(Integer, ForeignKey("body_position.id"))
+#     procedure_instruction_id = Column(Integer, ForeignKey("procedures_instructions.id"))
+#     tools_work_id = Column(Integer, ForeignKey("work_tool_areas.id"))
+#     ergonomics_id = Column(Integer, ForeignKey("ergonomics.id"))
+#     ppe_id = Column(Integer, ForeignKey("ppe.id"))
+#     personal_productive_hygiene_id = Column(
+#         Integer, ForeignKey("personal_productive_hygiene.id")
+#     )
+#     equipment_tools_work_area_id = Column(
+#         Integer, ForeignKey("equipment_tools_work_area.id")
+#     )
+#     foreign_body_control_id = Column(Integer, ForeignKey("foreign_body_control.id"))
+#     percentage = Column(Float)
+#     safe_reason = Column(String)
+#     unsafe_reason = Column(String)
+#     action_plan = Column(String)
+#     remarks = Column(String)
+#     created_at = Column(
+#         DateTime(timezone=True), server_default=func.now(), nullable=False
+#     )
+#     updated_at = Column(
+#         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+#     )
+
+
 class Task(Base):
     __tablename__ = "tasks"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     cty_code = Column(String, nullable=False)
-    dept_code = Column(String, nullable=False)
-    section_code = Column(String, nullable=False)
-    observation_type_id = Column(Integer, ForeignKey("observation_types.id"))
+    dept_code = Column(Integer, ForeignKey("departments.id"), nullable=False)
+    section_code = Column(Integer, ForeignKey("sections.sec_id"), nullable=False)
+    observation_type_id = Column(
+        Integer,
+        ForeignKey("observation_types.id"),
+        nullable=False,
+    )
     person_working = Column(String, nullable=False)
     observation_done_by = Column(String, nullable=False)
     task_desc = Column(String, nullable=False)
-    personnel = Column(String, nullable=False)
-    task_date = Column(DateTime, server_default=func.now())
-    status = Column(
-        String, nullable=False, default="open"
-    )  # should default to open until changed by designated personnel
-    body_position_id = Column(Integer, ForeignKey("body_position.id"))
-    procedure_instruction_id = Column(Integer, ForeignKey("procedures_instructions.id"))
-    tools_work_id = Column(Integer, ForeignKey("work_tool_areas.id"))
-    ergonomics_id = Column(Integer, ForeignKey("ergonomics.id"))
-    ppe_id = Column(Integer, ForeignKey("ppe.id"))
-    personal_productive_hygiene_id = Column(
-        Integer, ForeignKey("personal_productive_hygiene.id")
+    personnel_id = Column(
+        Integer,
+        ForeignKey("personnel.personnel_id"),
+        nullable=False,
     )
-    equipment_tools_work_area_id = Column(
-        Integer, ForeignKey("equipment_tools_work_area.id")
+    task_date = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
     )
-    foreign_body_control_id = Column(Integer, ForeignKey("foreign_body_control.id"))
+    status = Column(String, nullable=False, default="Open")
     percentage = Column(Float)
     safe_reason = Column(String)
     unsafe_reason = Column(String)
     action_plan = Column(String)
     remarks = Column(String)
     created_at = Column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
     )
     updated_at = Column(
-        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
+
+
+class SBOObservation(Base):
+    __tablename__ = "sbo_observations"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    task_id = Column(
+        Integer,
+        ForeignKey("tasks.id"),
+        nullable=False,
+        unique=True,
+    )
+    body_position_id = Column(
+        Integer,
+        ForeignKey("body_position.id"),
+        nullable=False,
+    )
+    procedure_instruction_id = Column(
+        Integer,
+        ForeignKey("procedures_instructions.id"),
+        nullable=False,
+    )
+    work_tool_area_id = Column(
+        Integer,
+        ForeignKey("work_tool_areas.id"),
+        nullable=False,
+    )
+    ergonomics_id = Column(
+        Integer,
+        ForeignKey("ergonomics.id"),
+        nullable=False,
+    )
+    ppe_id = Column(
+        Integer,
+        ForeignKey("ppe.id"),
+        nullable=False,
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
     )
 
 
@@ -269,3 +357,38 @@ class ForeignBodyControl(Base):
     flies_in_area = Column(String, nullable=False)
     risk_of_contamination = Column(String, nullable=False)
     status = Column(Integer, nullable=False)
+
+class FSBOObservation(Base):
+    __tablename__ = "fsbo_observations"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    task_id = Column(
+        Integer,
+        ForeignKey("tasks.id"),
+        nullable=False,
+        unique=True,
+    )
+    personal_productive_hygiene_id = Column(
+        Integer,
+        ForeignKey("personal_productive_hygiene.id"),
+        nullable=False,
+    )
+    equipment_tools_work_area_id = Column(
+        Integer,
+        ForeignKey("equipment_tools_work_area.id"),
+        nullable=False,
+    )
+    foreign_body_control_id = Column(
+        Integer,
+        ForeignKey("foreign_body_control.id"),
+        nullable=False,
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
