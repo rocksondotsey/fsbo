@@ -14,8 +14,8 @@ from sqlalchemy.sql import func
 
 class Country(Base):
     __tablename__ = "countries"
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    name = Column(String, nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    cty_name = Column(String, nullable=False, unique=True)
     cty_code = Column(String, nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -27,8 +27,8 @@ class Country(Base):
 
 class Site(Base):
     __tablename__ = "sites"
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    st_name = Column(String, nullable=False, unique=True)
     st_code = Column(String, nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -40,7 +40,7 @@ class Site(Base):
 
 class ObservationType(Base):
     __tablename__ = "observation_types"
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     observation_type = Column(String, nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -52,7 +52,7 @@ class ObservationType(Base):
 
 class Department(Base):
     __tablename__ = "departments"
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     dept_name = Column(String, nullable=False, unique=True)
     st_code = Column(String, ForeignKey("sites.st_code"), nullable=False, unique=True)
     created_at = Column(
@@ -65,7 +65,7 @@ class Department(Base):
 
 class Section(Base):
     __tablename__ = "sections"
-    sec_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    sec_id = Column(Integer, primary_key=True, autoincrement=True)
     sec_name = Column(String, nullable=False, unique=True)
     dept_code = Column(
         Integer, ForeignKey("departments.id"), nullable=False, unique=True
@@ -80,9 +80,8 @@ class Section(Base):
 
 class Status(Base):
     __tablename__ = "status"
-    status_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    status_id = Column(Integer, primary_key=True)
     status_name = Column(String, nullable=False, unique=True)
-    status_code = Column(Integer, nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -95,7 +94,7 @@ class Reason(Base):
     __tablename__ = "reasons"
     reason_id = Column(Integer, primary_key=True, nullable=False)
     reason_desc = Column(String, nullable=False, unique=True)
-    reason_code = Column(Integer, nullable=False, unique=True)
+    # reason_code = Column(Integer, nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -103,10 +102,10 @@ class Reason(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-
+# employee/contractor
 class Personnel(Base):
     __tablename__ = "personnel"
-    personnel_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    personnel_id = Column(Integer, primary_key=True)
     personnel_desc = Column(String, nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -119,112 +118,62 @@ class Personnel(Base):
 # SBO
 class BodyPosition(Base):
     __tablename__ = "body_position"
-
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-
-    eye_on_job = Column(String, nullable=False)
-    trapped_btw_objects = Column(String, nullable=False)
-    work_speed = Column(String, nullable=False)
-    contact_with_hazardous_substance = Column(String, nullable=False)
-    contact_with_electricity = Column(String, nullable=False)
-    contact_with_extreme_temperature = Column(String, nullable=False)
-    contact_with_sharp_object = Column(String, nullable=False)
-    contact_with_object_in_motion = Column(String, nullable=False)
-    possible_steam_splash = Column(String, nullable=False)
-    being_hit_by_object = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    eye_on_job = Column(Integer, nullable=False)
+    trapped_btw_objects = Column(Integer, nullable=False)
+    work_speed = Column(Integer, nullable=False)
+    contact_with_hazardous_substance = Column(Integer, nullable=False)
+    contact_with_electricity = Column(Integer, nullable=False)
+    contact_with_extreme_temperature = Column(Integer, nullable=False)
+    contact_with_sharp_object = Column(Integer, nullable=False)
+    contact_with_object_in_motion = Column(Integer, nullable=False)
+    possible_steam_splash = Column(Integer, nullable=False)
+    being_hit_by_object = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class ProcedureInstruction(Base):
     __tablename__ = "procedures_instructions"
-
-    id = Column(Integer, primary_key=True, index=True)
-
-    available = Column(String, nullable=False)
-    known_understood = Column(String, nullable=False)
-    appropriate_applied = Column(String, nullable=False)
-    knowledge_safety_rules = Column(String, nullable=False)
-    understanding_of_safety_rules = Column(String, nullable=False)
-    right_permit = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    available = Column(Integer, nullable=False)
+    known_understood = Column(Integer, nullable=False)
+    appropriate_applied = Column(Integer, nullable=False)
+    knowledge_safety_rules = Column(Integer, nullable=False)
+    understanding_of_safety_rules = Column(Integer, nullable=False)
+    right_permit = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class WorkToolArea(Base):
     __tablename__ = "work_tool_areas"
-
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-
-    correct_use = Column(String, nullable=False)
-    appropriate_for_task = Column(String, nullable=False)
-    in_good_condition = Column(String, nullable=False)
-    housekeeping = Column(String, nullable=False)
-    no_improvisation = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    correct_use = Column(Integer, nullable=False)
+    appropriate_for_task = Column(Integer, nullable=False)
+    in_good_condition = Column(Integer, nullable=False)
+    housekeeping = Column(Integer, nullable=False)
+    no_improvisation = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class Ergonomics(Base):
     __tablename__ = "ergonomics"
-
-    id = Column(Integer, primary_key=True, index=True)
-
-    work_posture = Column(String, nullable=False)
-    work_station_org = Column(String, nullable=False)
-    lifting_heavy_load = Column(String, nullable=False)
-    repetitive_motion = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    work_posture = Column(Integer, nullable=False)
+    work_station_org = Column(Integer, nullable=False)
+    lifting_heavy_load = Column(Integer, nullable=False)
+    repetitive_motion = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class PPE(Base):
     __tablename__ = "ppe"
-
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-
-    appropriate_for_task = Column(String, nullable=False)
-    correct_use = Column(String, nullable=False)
-    in_good_condition = Column(String, nullable=False)
-    correct_fall_protection = Column(String, nullable=False)
-    protection_from_cold_conditions = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
-
-
-# class Task(Base):
-#     __tablename__ = "tasks"
-#     id = Column(Integer, primary_key=True, index=True)
-#     cty_code = Column(String, nullable=False)
-#     dept_code = Column(String, nullable=False)
-#     section_code = Column(String, nullable=False)
-#     observation_type_id = Column(Integer, ForeignKey("observation_types.id"))
-#     person_working = Column(String, nullable=False)
-#     observation_done_by = Column(String, nullable=False)
-#     task_desc = Column(String, nullable=False)
-#     personnel = Column(String, nullable=False)
-#     task_date = Column(DateTime, server_default=func.now())
-#     status = Column(
-#         String, nullable=False, default="open"
-#     )  # should default to open until changed by designated personnel
-#     body_position_id = Column(Integer, ForeignKey("body_position.id"))
-#     procedure_instruction_id = Column(Integer, ForeignKey("procedures_instructions.id"))
-#     tools_work_id = Column(Integer, ForeignKey("work_tool_areas.id"))
-#     ergonomics_id = Column(Integer, ForeignKey("ergonomics.id"))
-#     ppe_id = Column(Integer, ForeignKey("ppe.id"))
-#     personal_productive_hygiene_id = Column(
-#         Integer, ForeignKey("personal_productive_hygiene.id")
-#     )
-#     equipment_tools_work_area_id = Column(
-#         Integer, ForeignKey("equipment_tools_work_area.id")
-#     )
-#     foreign_body_control_id = Column(Integer, ForeignKey("foreign_body_control.id"))
-#     percentage = Column(Float)
-#     safe_reason = Column(String)
-#     unsafe_reason = Column(String)
-#     action_plan = Column(String)
-#     remarks = Column(String)
-#     created_at = Column(
-#         DateTime(timezone=True), server_default=func.now(), nullable=False
-#     )
-#     updated_at = Column(
-#         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
-#     )
+    appropriate_for_task = Column(Integer, nullable=False)
+    correct_use = Column(Integer, nullable=False)
+    in_good_condition = Column(Integer, nullable=False)
+    correct_fall_protection = Column(Integer, nullable=False)
+    protection_from_cold_conditions = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class Task(Base):
@@ -320,43 +269,43 @@ class SBOObservation(Base):
 
 class PersonalProductiveHygiene(Base):
     __tablename__ = "personal_productive_hygiene"
-    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    possibility_of_cross_contamination = Column(String, nullable=False)
-    time_temp_control = Column(String, nullable=False)
-    product_fish_on_floor = Column(String, nullable=False)
-    condensation_dust_from_ceiling = Column(String, nullable=False)
-    belts_scrapers_condition = Column(String, nullable=False)
-    coding_integrity = Column(String, nullable=False)
-    hair_beard_covering = Column(String, nullable=False)
-    aprons_overall_uniform_condition = Column(String, nullable=False)
-    fingernail_nailpaint_jewellery = Column(String, nullable=False)
-    handwashing_sanitation = Column(String, nullable=False)
-    product_process_ingredient_security = Column(String, nullable=False)
-    strong_perfume_cream = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    possibility_of_cross_contamination = Column(Integer, nullable=False)
+    time_temp_control = Column(Integer, nullable=False)
+    product_fish_on_floor = Column(Integer, nullable=False)
+    condensation_dust_from_ceiling = Column(Integer, nullable=False)
+    belts_scrapers_condition = Column(Integer, nullable=False)
+    coding_integrity = Column(Integer, nullable=False)
+    hair_beard_covering = Column(Integer, nullable=False)
+    aprons_overall_uniform_condition = Column(Integer, nullable=False)
+    fingernail_nailpaint_jewellery = Column(Integer, nullable=False)
+    handwashing_sanitation = Column(Integer, nullable=False)
+    product_process_ingredient_security = Column(Integer, nullable=False)
+    strong_perfume_cream = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class EquipmentToolsWorkArea(Base):
     __tablename__ = "equipment_tools_work_area"
-    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    correct_use = Column(String, nullable=False)
-    condition = Column(String, nullable=False)
-    contact_surface_clean_not_rusted = Column(String, nullable=False)
-    work_area_equipment_cleanliness = Column(String, nullable=False)
-    calibration_status = Column(String, nullable=False)
-    toolkit_sanitized_and_kept_in_place = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    correct_use = Column(Integer, nullable=False)
+    condition = Column(Integer, nullable=False)
+    contact_surface_clean_not_rusted = Column(Integer, nullable=False)
+    work_area_equipment_cleanliness = Column(Integer, nullable=False)
+    calibration_status = Column(Integer, nullable=False)
+    toolkit_sanitized_and_kept_in_place = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 
 class ForeignBodyControl(Base):
     __tablename__ = "foreign_body_control"
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    glass_and_hard_plastic_condition = Column(String, nullable=False)
-    metal_detector_working = Column(String, nullable=False)
-    trays_plastic_pallets_condition = Column(String, nullable=False)
-    flies_in_area = Column(String, nullable=False)
-    risk_of_contamination = Column(String, nullable=False)
-    status = Column(Integer, nullable=False)
+    glass_and_hard_plastic_condition = Column(Integer, nullable=False)
+    metal_detector_working = Column(Integer, nullable=False)
+    trays_plastic_pallets_condition = Column(Integer, nullable=False)
+    flies_in_area = Column(Integer, nullable=False)
+    risk_of_contamination = Column(Integer, nullable=False)
+    # status = Column(Integer, nullable=False)
 
 class FSBOObservation(Base):
     __tablename__ = "fsbo_observations"
