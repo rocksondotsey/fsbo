@@ -38,6 +38,18 @@ class Site(Base):
     )
 
 
+class ObservationType(Base):
+    __tablename__ = "observation_types"
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    observation_type = Column(String, nullable=False, unique=True)
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at = Column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class Department(Base):
     __tablename__ = "departments"
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -181,17 +193,27 @@ class Task(Base):
     cty_code = Column(String, nullable=False)
     dept_code = Column(String, nullable=False)
     section_code = Column(String, nullable=False)
+    observation_type_id = Column(Integer, ForeignKey("observation_types.id"))
     person_working = Column(String, nullable=False)
     observation_done_by = Column(String, nullable=False)
     task_desc = Column(String, nullable=False)
     personnel = Column(String, nullable=False)
     task_date = Column(DateTime, server_default=func.now())
-    status = Column(String, nullable=False)
+    status = Column(
+        String, nullable=False, default="open"
+    )  # should default to open until changed by designated personnel
     body_position_id = Column(Integer, ForeignKey("body_position.id"))
     procedure_instruction_id = Column(Integer, ForeignKey("procedures_instructions.id"))
     tools_work_id = Column(Integer, ForeignKey("work_tool_areas.id"))
     ergonomics_id = Column(Integer, ForeignKey("ergonomics.id"))
     ppe_id = Column(Integer, ForeignKey("ppe.id"))
+    personal_productive_hygiene_id = Column(
+        Integer, ForeignKey("personal_productive_hygiene.id")
+    )
+    equipment_tools_work_area_id = Column(
+        Integer, ForeignKey("equipment_tools_work_area.id")
+    )
+    foreign_body_control_id = Column(Integer, ForeignKey("foreign_body_control.id"))
     percentage = Column(Float)
     safe_reason = Column(String)
     unsafe_reason = Column(String)
